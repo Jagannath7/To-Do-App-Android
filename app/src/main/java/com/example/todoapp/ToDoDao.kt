@@ -17,7 +17,7 @@ interface ToDoDao {
     @Query("Update TodoModel Set isFinished = 1 where id=:uid")
     fun finishTask(uid:Long)
 
-    @Query("Delete  from TodoModel where id=:uid")
+    @Query("Delete from TodoModel where id=:uid")
     fun deleteTask(uid:Long)
 
 }
