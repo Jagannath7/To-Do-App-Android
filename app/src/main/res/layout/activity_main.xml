@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:id="@+id/addActivity"
         android:layout_margin="32dp"/>
 
 

@@ -12,6 +12,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        addActivity.setOnClickListener {
+            startActivity(Intent(this, Tasks::class.java))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
