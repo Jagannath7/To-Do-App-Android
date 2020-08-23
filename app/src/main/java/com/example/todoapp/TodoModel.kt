@@ -10,7 +10,7 @@ data class TodoModel (
     val category: String,
     val date: Long,
     val time: Long,
-    val isFinished: Int = -1,
+    val isFinished: Int = 0,
     @PrimaryKey(autoGenerate = true)
-    val id: Int
+    val id: Long = 0
 )

@@ -6,7 +6,7 @@
         android:title="History"
         app:showAsAction="never"/>
 
-    <item android:id = "@+id/srch"
+    <item android:id = "@+id/search"
         android:title="search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView"/>

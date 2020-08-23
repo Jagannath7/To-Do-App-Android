@@ -10,6 +10,10 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_tasks.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,14 +25,13 @@ class Tasks : AppCompatActivity(), View.OnClickListener {
     lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     lateinit var timeSetListener: TimePickerDialog.OnTimeSetListener
 
+    var finalDate = 0L
+    var finalTime = 0L
+
     private val labels = arrayListOf("Personal", "Work", "Diet", "Exercise", "Shopping")
 
     val db by lazy {
-        Room.databaseBuilder(
-            this,
-            AppDatabase::class.java,
-            DB_NAME
-        )
+        AppDatabase.getDatabase(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +41,7 @@ class Tasks : AppCompatActivity(), View.OnClickListener {
 
         dateEdt.setOnClickListener(this)
         timeEdt.setOnClickListener(this)
+        saveBtn.setOnClickListener(this)
 
         setUpSpinner()
     }
@@ -59,7 +63,32 @@ class Tasks : AppCompatActivity(), View.OnClickListener {
             R.id.timeEdt -> {
                 setTimeListener()
             }
+            R.id.saveBtn -> {
+                saveTodo()
+            }
         }
+    }
+
+    private fun saveTodo() {
+        val category = spinnerCategory.selectedItem.toString()
+        val title = titleInpLay.editText?.text.toString()
+        val description = taskInpLay.editText?.text.toString()
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val id = withContext(Dispatchers.IO) {
+                return@withContext db.todoDao().insertTask(
+                    TodoModel(
+                        title,
+                        description,
+                        category,
+                        finalDate,
+                        finalTime
+                    )
+                )
+            }
+            finish()
+        }
+
     }
 
     private fun setTimeListener() {
@@ -101,12 +130,14 @@ class Tasks : AppCompatActivity(), View.OnClickListener {
     private fun updateDate() {
         val myFormat = "EEE, d MMM yyyy"
         val sdf = SimpleDateFormat(myFormat)
+        finalDate = myCalendar.time.time
         dateEdt.setText(sdf.format(myCalendar.time))
     }
 
     private fun updateTime() {
         val myFormat = "h:mm a "
         val sdf = SimpleDateFormat(myFormat)
+        finalTime = myCalendar.time.time
         timeEdt.setText(sdf.format(myCalendar.time))
     }
 

@@ -22,6 +22,10 @@ class TodoAdapter (val list: List<TodoModel>): RecyclerView.Adapter<TodoAdapter.
         holder.bind(list[position])
     }
 
+    override fun getItemId(position: Int): Long {
+        return list[position].id
+    }
+
     class TodoViewHolder(itemView:View): RecyclerView.ViewHolder(itemView) {
         fun bind(todoModel: TodoModel) {
             with(itemView){
